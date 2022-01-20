@@ -1,4 +1,5 @@
 import bank
 
-class Main:
 
+class Main:
+    abc = ""
