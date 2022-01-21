@@ -1,8 +1,8 @@
 import itertools
-#import account
+import account
 
 
-class Customer():
+class Customer:
     customer_id = itertools.count()
 
     def __init__(self, first_name, last_name, ssn):
@@ -11,6 +11,7 @@ class Customer():
         self.ssn = ssn
         self.customer_id = next(self.customer_id)
         self.customer_id = 11110 + self.customer_id
+        self.accounts = []
 
 
     """Three methods of changing customer name:
@@ -28,11 +29,27 @@ class Customer():
         self.first_name = first_name
         self.last_name = last_name
 
-    # Show customer information, social security number, first & last name,
+    # Show customer information: social security number, first & last name & account: number, balance, type
     def show_customer(self):
-        return self.ssn, self.first_name, self.last_name
+        account_detail = []
+        for account in self.accounts:
+            details = account.account_number, account.balance, account.account_type
+            account_detail.append(details)
+        return self.ssn, self.first_name, self.last_name, account_detail
+
+    # Add new account
+    def add_account(self):
+        acc = account.Account()
+        self.accounts.append(acc)
 
 
 a = Customer("Erik", "Eriksson", 197503033341)
 b = Customer("Anna", "Svensson", 198706301212)
 
+a.add_account()
+a.add_account()
+a.add_account()
+
+
+
+#print(a.show_customer())

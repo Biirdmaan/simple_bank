@@ -1,19 +1,14 @@
 import itertools
-from customer import Customer
+
 
 class Account:
     account_number = itertools.count()
-    account_type = "Debit account"
-    balance = 0.0
 
-    def __init__(self, customer_id):
+    def __init__(self):
+        self.account_type = "Debit account"
         self.balance = 0
-        self.customer_id = customer_id
-        print(self.customer_id)
-
-        self.account_number = next(self.account_number)     #
+        self.account_number = next(self.account_number)  #
         self.account_number = 1001 + self.account_number
-
 
 
     def deposit(self, amount):
@@ -33,5 +28,3 @@ class Account:
         return self.account_number, self.balance, self.account_type
 
 
-
-account1 = Account()
