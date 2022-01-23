@@ -1,18 +1,31 @@
 import customer
 
+
 class Bank:
 
     def __init__(self):
         self.customers = []
         self.name = "SEB"
 
-    # Läser in en textfil och befolkar listan som ska innehålla kunderna
+    """ 
+    _load metoden:
+    Reads textfile and add customer from textfile to customer list - customers[] 
+    if customer_id (textfile) != customer_id (in customers[]), customer adds to customer[] with same id as textfile
+    else customer gets a new id. 
+    """
     def _load(self):
-        for elem in open("Customer_bank.txt").readlines():
-            self.customers.append(elem.strip())
+        for line in open("Customer_bank.txt").readlines():
+            cust = line.strip().split(':')
+            for x in self.customers:
+                if int(cust[0]) != int(x.customer_id):
+                    client = customer.Customer(cust[1], cust[2], cust[3], cust[0])
+                    self.customers.append(client)
+                    break
+                else:
+                    client = customer.Customer(cust[1], cust[2], cust[3])
+                    self.customers.append(client)
+                    break
         return self.customers
-
-        #return self.customers.append([v.strip() for v in open("Customer_bank.txt").readlines()])
 
     # get all customers, return [] of all customers with ssn, first_name, last_name
     def get_customers(self):
@@ -23,26 +36,41 @@ class Bank:
         return all_customers
         # returner bankens alla kunder (personnummer & namn)
 
+    """
+    Behövs justeras, skapar samma customer 2 ggr, varför? 
+    """
     def add_customer(self, first_name, last_name, ssn):
         client = customer.Customer(first_name, last_name, ssn)
+        print(client)
         check = True
         if self.customers == []:
             self.customers.append(client)
-            print(f"Customer {client.first_name} {client.last_name} has been added!")
+            print(f"Customer {client.customer_id}: {client.first_name} {client.last_name} has been added!")
         else:
             for x in self.customers:
-                if x.ssn != client.ssn:
+                if x.ssn != ssn:
                     self.customers.append(client)
-                    print(f"Customer {client.first_name} {client.last_name} has been added!")
+                    print(f"Customer {client.customer_id}: {client.first_name} {client.last_name} has been added!")
+                    break
                 else:
                     check = False
+                    break
         return check
-
 
         # Skapar en ny kund om inte personnumret redan angetts.
         # Returner True om kunden har skapat & False om personnumret redan är upptaget.
 
     def get_customer(self, ssn):
+
+        for x in self.customers:
+            try:
+                if ssn == x.ssn:
+                    return x.show_customer()
+                else:
+                    print("Customer not found!")
+            except:
+                print("Error, no customer found in customer list")
+
         # Returnerar information om kunden inklusive dess konton.
         # Ordningen på returen är: Kundens förnamn, efternamn, ssn, dess konto (sort by account id?)
         pass
@@ -88,13 +116,7 @@ class Bank:
 
 
 a = Bank()
+a.add_customer("Dejan", "Spasovic", 198805293311)
+print(a.customers)
 
-#a._load()
-
-#print(a.customers)
-
-
-print(a.add_customer("Dejan", "Spasovic", 198805293311))
-print(a.add_customer("Dejan", "Spasovic", 198805293311))
-
-
+print(a.get_customers(198805293311))

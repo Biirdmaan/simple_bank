@@ -5,13 +5,17 @@ import account
 class Customer:
     customer_id = itertools.count()
 
-    def __init__(self, first_name, last_name, ssn):
+    def __init__(self, first_name, last_name, ssn, customer_id=None):
         self.first_name = first_name
         self.last_name = last_name
         self.ssn = ssn
-        self.customer_id = next(self.customer_id)
-        self.customer_id = 11110 + self.customer_id
         self.accounts = []
+        if customer_id:
+            self.customer_id = customer_id
+        else:
+            self.customer_id = next(self.customer_id)
+            self.customer_id = 11110 + self.customer_id
+
 
 
     """Three methods of changing customer name:
@@ -45,11 +49,5 @@ class Customer:
 
 a = Customer("Erik", "Eriksson", 197503033341)
 b = Customer("Anna", "Svensson", 198706301212)
-
-a.add_account()
-a.add_account()
-a.add_account()
-
-
 
 #print(a.show_customer())
