@@ -8,7 +8,7 @@ class Customer:
     def __init__(self, first_name, last_name, ssn, customer_id=None):
         self.first_name = first_name
         self.last_name = last_name
-        self.ssn = ssn
+        self.ssn = str(ssn)
         self.accounts = []
         if customer_id:
             self.customer_id = customer_id
@@ -45,9 +45,3 @@ class Customer:
     def add_account(self):
         acc = account.Account()
         self.accounts.append(acc)
-
-
-a = Customer("Erik", "Eriksson", 197503033341)
-b = Customer("Anna", "Svensson", 198706301212)
-
-#print(a.show_customer())

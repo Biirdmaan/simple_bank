@@ -1,34 +1,37 @@
 import customer
-
-
+from customer import Customer
 class Bank:
 
     def __init__(self):
         self.customers = []
         self.name = "SEB"
 
-    """ 
-    _load metoden:
-    Reads textfile and add customer from textfile to customer list - customers[] 
-    if customer_id (textfile) != customer_id (in customers[]), customer adds to customer[] with same id as textfile
-    else customer gets a new id. 
-    """
+
     def _load(self):
+        """
+          _load method:
+          Reads textfile and add customer from textfile to customer list - customers[]
+          if customer_id (textfile) != customer_id (in customers[]), customer adds to customer[] with same id as textfile
+          else customer gets a new id.
+        """
         for line in open("Customer_bank.txt").readlines():
             cust = line.strip().split(':')
             for x in self.customers:
-                if int(cust[0]) != int(x.customer_id):
-                    client = customer.Customer(cust[1], cust[2], cust[3], cust[0])
-                    self.customers.append(client)
-                    break
+                if cust[3] != x.ssn:
+                    if int(cust[0]) != int(x.customer_id):
+                        client = customer.Customer(cust[1], cust[2], cust[3], cust[0])
+                        self.customers.append(client)
+                        break
+                    else:
+                        client = customer.Customer(cust[1], cust[2], cust[3])
+                        self.customers.append(client)
+                        break
                 else:
-                    client = customer.Customer(cust[1], cust[2], cust[3])
-                    self.customers.append(client)
-                    break
+                    print("Customer already exist!")
         return self.customers
 
     # get all customers, return [] of all customers with ssn, first_name, last_name
-    def get_customers(self):
+    def get_all_customers(self):
         all_customers = []
         for customer in self.customers:
             details = customer.ssn, customer.last_name, customer.last_name
@@ -41,39 +44,39 @@ class Bank:
     """
     def add_customer(self, first_name, last_name, ssn):
         client = customer.Customer(first_name, last_name, ssn)
-        print(client)
         check = True
         if self.customers == []:
             self.customers.append(client)
             print(f"Customer {client.customer_id}: {client.first_name} {client.last_name} has been added!")
         else:
             for x in self.customers:
-                if x.ssn != ssn:
+                if x.ssn != client.ssn:
                     self.customers.append(client)
                     print(f"Customer {client.customer_id}: {client.first_name} {client.last_name} has been added!")
                     break
                 else:
                     check = False
+                    print("SSN already exist!")
                     break
         return check
 
         # Skapar en ny kund om inte personnumret redan angetts.
         # Returner True om kunden har skapat & False om personnumret redan är upptaget.
 
-    def get_customer(self, ssn):
+    def get_customer(self, pnr):
+        # Returnerar information om kunden inklusive dess konton.
+        # Ordningen på returen är: Kundens förnamn, efternamn, ssn, dess konto (sort by account id?)
 
-        for x in self.customers:
-            try:
-                if ssn == x.ssn:
+        if self.customers == []:
+            print("Error, no customer found in customer list")
+        else:
+            for x in self.customers:
+                if pnr == x.ssn:
                     return x.show_customer()
                 else:
                     print("Customer not found!")
-            except:
-                print("Error, no customer found in customer list")
+                    break
 
-        # Returnerar information om kunden inklusive dess konton.
-        # Ordningen på returen är: Kundens förnamn, efternamn, ssn, dess konto (sort by account id?)
-        pass
 
     def change_customer_name(self, ssn, first_name=None, last_name=None):
         # while ssn in self.customers:
@@ -116,7 +119,10 @@ class Bank:
 
 
 a = Bank()
-a.add_customer("Dejan", "Spasovic", 198805293311)
-print(a.customers)
+a.add_customer("Dejan", "Spasovic", 10005050505)
+a.add_customer("Den", "Spasaass", 8803033317)
+a.add_customer("Dejan", "Spasovic", 200005050505)
 
-print(a.get_customers(198805293311))
+a._load()
+
+a._load()
