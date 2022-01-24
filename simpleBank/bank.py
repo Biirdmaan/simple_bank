@@ -6,13 +6,13 @@ class Bank:
         self.customers = []
         self.name = "SEB"
 
-
+    # needs update, does not work with ssn yet!
     def _load(self):
         """
-          _load method:
-          Reads textfile and add customer from textfile to customer list - customers[]
-          if customer_id (textfile) != customer_id (in customers[]), customer adds to customer[] with same id as textfile
-          else customer gets a new id.
+        Load and strip customer information from a textfile.
+        Customer information initialize to a customer object and append to customers[], if ssn does not exist.
+        if customer_id already exist, customer gets a new customer_id
+        :return:
         """
         for line in open("Customer_bank.txt").readlines():
             cust = line.strip().split(':')
@@ -30,8 +30,12 @@ class Bank:
                     print("Customer already exist!")
         return self.customers
 
-    # get all customers, return [] of all customers with ssn, first_name, last_name
+
     def get_all_customers(self):
+        """
+        Get all customers
+        :return: list of all customers, showing customer information: ssn, first_name and last_name
+        """
         all_customers = []
         for customer in self.customers:
             details = customer.ssn, customer.last_name, customer.last_name
@@ -39,10 +43,15 @@ class Bank:
         return all_customers
         # returner bankens alla kunder (personnummer & namn)
 
-    """
-    Behövs justeras, skapar samma customer 2 ggr, varför? 
-    """
+
     def add_customer(self, first_name, last_name, ssn):
+        """
+        Create customer if ssn not used.
+        :param first_name:
+        :param last_name:
+        :param ssn:
+        :return:
+        """
         client = customer.Customer(first_name, last_name, ssn)
         check = True
         if self.customers == []:
@@ -64,9 +73,11 @@ class Bank:
         # Returner True om kunden har skapat & False om personnumret redan är upptaget.
 
     def get_customer(self, pnr):
-        # Returnerar information om kunden inklusive dess konton.
-        # Ordningen på returen är: Kundens förnamn, efternamn, ssn, dess konto (sort by account id?)
-
+        """
+        Get customer by ssn.
+        :param pnr:
+        :return: information about customer + accounts.
+        """
         if self.customers == []:
             print("Error, no customer found in customer list")
         else:
@@ -78,7 +89,24 @@ class Bank:
                     break
 
 
-    def change_customer_name(self, ssn, first_name=None, last_name=None):
+    def change_customer_name(self, ssn, name):
+        """
+        Change customer name.
+        :param ssn:
+        :param name: Enter first and last name.
+        :return: True if customer name change, False if not
+        """
+
+        for x in self.customers:
+            if ssn == x.ssn:
+                x.first_name = name.split()[0]
+                x.last_name = name.split()[1]
+                return True
+            else:
+                print(f"Person with {ssn} is not a customer!")
+                return False
+
+
         # while ssn in self.customers:
 
         # Byter namn på kunden, returnerar True om namnet ändrats, False om kunde inte finns.
@@ -91,8 +119,20 @@ class Bank:
         pass
 
     def add_account(self, ssn):
+        """
+        Adds a new account by ssn
+        :param ssn:
+        :return: String "Account created, with information about the account"
+        """
+        if self.customers == []:
+            print("No customer found")
+        else:
+            for x in self.customers:
+                if ssn == x.ssn:
+                    x.add_account()
+                    break
         # Skapa ett konto, returnerar: kontonummer eller -1 om personnumret inte hittades
-        pass
+
 
     def get_account(self, ssn, account_id):
         # Returnerar en string: kontonummer, saldo, kontotyp
@@ -119,10 +159,13 @@ class Bank:
 
 
 a = Bank()
-a.add_customer("Dejan", "Spasovic", 10005050505)
-a.add_customer("Den", "Spasaass", 8803033317)
+#a.add_customer("Dejan", "Spasovic", 10005050505)
+#a.add_customer("Den", "Spasaass", 8803033317)
 a.add_customer("Dejan", "Spasovic", 200005050505)
 
-a._load()
 
-a._load()
+a.add_account("200005050505")
+
+print(a.get_customer("200005050505"))
+a.change_customer_name("200005050505", "Albert Einstein")
+print(a.get_customer("200005050505"))

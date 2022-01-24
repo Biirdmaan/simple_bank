@@ -45,3 +45,7 @@ class Customer:
     def add_account(self):
         acc = account.Account()
         self.accounts.append(acc)
+        print(f"Account created! \n"
+              f"Account number: {acc.account_number},\n"
+              f"Account type: {acc.account_type}, \n"
+              f"Account balance: {acc.balance}")
