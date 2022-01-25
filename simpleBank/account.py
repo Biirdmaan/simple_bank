@@ -10,6 +10,8 @@ class Account:
         self.account_number = next(self.account_number)  #
         self.account_number = 1001 + self.account_number
 
+    def __str__(self):
+        return f":{self.account_number}:{self.account_type}:{self.balance}"
 
     def deposit(self, amount):
         self.balance += amount

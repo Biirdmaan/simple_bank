@@ -16,6 +16,14 @@ class Customer:
             self.customer_id = next(self.customer_id)
             self.customer_id = 11110 + self.customer_id
 
+    def __str__(self):
+        acc_lst = []
+        for x in self.accounts:
+            acc_lst.append(x.account_number)
+            acc_lst.append(x.account_type)
+            acc_lst.append(x.balance)
+        return f"Customer ID: {self.customer_id},\nFull name: {self.first_name} {self.last_name},\nSSN: " \
+               f"{self.ssn},\nAccounts: {acc_lst}"
 
 
     """Three methods of changing customer name:
@@ -39,13 +47,19 @@ class Customer:
         for account in self.accounts:
             details = account.account_number, account.balance, account.account_type
             account_detail.append(details)
-        return self.ssn, self.first_name, self.last_name, account_detail
+        return self.customer_id, self.ssn, self.first_name, self.last_name, account_detail
 
     # Add new account
     def add_account(self):
         acc = account.Account()
         self.accounts.append(acc)
-        print(f"Account created! \n"
-              f"Account number: {acc.account_number},\n"
-              f"Account type: {acc.account_type}, \n"
-              f"Account balance: {acc.balance}")
+        print("Account is created")
+        return f"Account number: {acc.account_number},\nAccount type: {acc.account_type},\n Account balance: {acc.balance}"
+
+    def close_account(self, account_number):
+        for x in self.accounts:
+            if account_number == x.account_number:
+                account = self.accounts.index(x)
+                self.accounts.pop(account)
+                break
+

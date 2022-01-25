@@ -1,5 +1,6 @@
 import customer
-from customer import Customer
+import account
+
 class Bank:
 
     def __init__(self):
@@ -30,7 +31,6 @@ class Bank:
                     print("Customer already exist!")
         return self.customers
 
-
     def get_all_customers(self):
         """
         Get all customers
@@ -42,7 +42,6 @@ class Bank:
             all_customers.append(details)
         return all_customers
         # returner bankens alla kunder (personnummer & namn)
-
 
     def add_customer(self, first_name, last_name, ssn):
         """
@@ -88,7 +87,6 @@ class Bank:
                     print("Customer not found!")
                     break
 
-
     def change_customer_name(self, ssn, name):
         """
         Change customer name.
@@ -113,10 +111,27 @@ class Bank:
         pass
 
     def remove_customer(self, ssn):
-        # Ta bort kund --> Alla konton tas bort
-        # Returneras: resultatet, en lista med alla information om alla konton som tagits bort & saldo som kunden ska
-        # få tillbaka
-        pass
+        """
+        Ta bort kund --> Alla konton tas bort
+        Returneras: resultatet, en lista med alla information om alla konton som tagits bort & saldo som kunden ska
+        få tillbaka
+        :param ssn:
+        :return:
+        """
+        return_balance = 0
+        customer = []
+        account_list = []
+        for x in self.customers:
+            if x.ssn == ssn:
+                customer = self.customers.index(x)
+                self.customers.pop(customer)
+
+                for y in x.accounts:
+                    return_balance = y.balance
+                return f"Customer {x.first_name} {x.last_name} is deleted\n" \
+                       f"Return balance: {return_balance}"
+            else:
+                f"Customer with personal number: {ssn} not found!"
 
     def add_account(self, ssn):
         """
@@ -133,39 +148,83 @@ class Bank:
                     break
         # Skapa ett konto, returnerar: kontonummer eller -1 om personnumret inte hittades
 
-
     def get_account(self, ssn, account_id):
+        for customer in self.customers:
+            if customer.ssn == ssn:
+                print(customer.accounts[0])
+                for x in customer.accounts[0]:
+                    if x.account_id == account_id:
+                        return x.show_account()
+                    break
+            else:
+                return "Error, something went wrong"
         # Returnerar en string: kontonummer, saldo, kontotyp
-        pass
 
-    def deposit(self, ssn, account_id, amount):
+    def deposit(self, ssn, account_number, amount):
+
+        for x in self.customers:
+            if x.ssn == ssn:
+                for y in x.accounts:
+                    if y.account_number == account_number:
+                        y.deposit(amount)
+                        return True
+                    else:
+                        print(f"Account {account_number} not found")
+                        return False
+
         # Gör en insättning på kontot, returnerar: True om det gick igenom, False om ssn eller account_id inte hittades.
-        pass
 
-    def withdraw(self, ssn, account_id, amount):
+    def withdraw(self, ssn, account_number, amount):
+
+        for x in self.customers:
+            if x.ssn == ssn:
+                for y in x.accounts:
+                    if account_number == y.account_number:
+                        y.withdraw(amount)
+                        return True
+                    else:
+                        print(f"Account {account_number} not found!")
+                        return False
         # Gör ett uttag från kontot, returnerar True --> ok, False --> gick åt helvete
         pass
 
-    def close_account(self, ssn, account_id):
+    def close_account(self, ssn, account_number):
+        for x in self.customers:
+            if x.ssn == ssn:
+                for y in x.accounts:
+                    if y.account_number == account_number:
+                        x.close_account(account_number)
+                        return f"Account {account_number} closed, you will receive {y.balance}"
+                    else:
+                        return f"Account: {account_number} not found!"
+            else:
+                return f"Customer with ssn {ssn} not found!"
+
         # Avslutar ett konto
         # Returnerar en string: presentation av saldo som kunden ska ha.
-        pass
 
-    def get_all_transactions_by_pnr_acc_nr(self, ssn, account_number):
-        # --------------------VG---------------------
-        # Returnerar: alla transaktioner som en kund har gjort med ett specifikt konto
-        # returnerar -1 ifall kontot inte finns.
-        pass
 
 
 a = Bank()
 #a.add_customer("Dejan", "Spasovic", 10005050505)
 #a.add_customer("Den", "Spasaass", 8803033317)
 a.add_customer("Dejan", "Spasovic", 200005050505)
+a.add_customer("Jon", "Shimpans", 197805050505)
+a.add_customer("Erik", "Person", 190005050505)
 
 
 a.add_account("200005050505")
 
+
 print(a.get_customer("200005050505"))
-a.change_customer_name("200005050505", "Albert Einstein")
+a.deposit("200005050505", 1001, 500)
 print(a.get_customer("200005050505"))
+
+a.withdraw("200005050505", 1001, 300)
+
+print(a.get_customer("200005050505"))
+
+print(a.close_account("1988", 1001))
+
+#print(a.remove_customer("200005050505"))
+#a.get_account("200005050505", 1001)
