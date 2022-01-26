@@ -71,14 +71,14 @@ class Bank:
         # Skapar en ny kund om inte personnumret redan angetts.
         # Returner True om kunden har skapat & False om personnumret redan är upptaget.
 
-    def get_customer(self, pnr):
+    def get_customer_by_ssn(self, pnr):
         """
         Get customer by ssn.
         :param pnr:
         :return: information about customer + accounts.
         """
         if self.customers == []:
-            print("Error, no customer found in customer list")
+            print(f"Error, no customer found with ssn: {pnr}")
         else:
             for x in self.customers:
                 if pnr == x.ssn:
@@ -87,22 +87,27 @@ class Bank:
                     print("Customer not found!")
                     break
 
-    def change_customer_name(self, ssn, name):
+    def change_customer_name(self, ssn, first_name, last_name):
         """
         Change customer name.
         :param ssn:
         :param name: Enter first and last name.
         :return: True if customer name change, False if not
         """
-
-        for x in self.customers:
-            if ssn == x.ssn:
-                x.first_name = name.split()[0]
-                x.last_name = name.split()[1]
-                return True
-            else:
-                print(f"Person with {ssn} is not a customer!")
-                return False
+        if self.customers == []:
+            print("Bank has no customers!")
+            print(f"Customer with ssn: {ssn} not found!")
+            return False
+        else:
+            for x in self.customers:
+                if ssn == x.ssn:
+                    x.first_name = first_name
+                    x.last_name = last_name
+                    print(f"Customer {x.first_name} {x.last_name} has been updated!")
+                    return True
+                else:
+                    print(f"Person with {ssn} is not a customer!")
+                    return False
 
 
         # while ssn in self.customers:
@@ -140,13 +145,14 @@ class Bank:
         :return: String "Account created, with information about the account"
         """
         if self.customers == []:
-            print("No customer found")
+            print(f"Bank has no customer, no customer with ssn: {ssn} found")
         else:
             for x in self.customers:
                 if ssn == x.ssn:
-                    x.add_account()
+                    print(x.add_account())
                     break
         # Skapa ett konto, returnerar: kontonummer eller -1 om personnumret inte hittades
+
 
     def get_account(self, ssn, account_id):
         for customer in self.customers:
@@ -202,29 +208,3 @@ class Bank:
 
         # Avslutar ett konto
         # Returnerar en string: presentation av saldo som kunden ska ha.
-
-
-
-a = Bank()
-#a.add_customer("Dejan", "Spasovic", 10005050505)
-#a.add_customer("Den", "Spasaass", 8803033317)
-a.add_customer("Dejan", "Spasovic", 200005050505)
-a.add_customer("Jon", "Shimpans", 197805050505)
-a.add_customer("Erik", "Person", 190005050505)
-
-
-a.add_account("200005050505")
-
-
-print(a.get_customer("200005050505"))
-a.deposit("200005050505", 1001, 500)
-print(a.get_customer("200005050505"))
-
-a.withdraw("200005050505", 1001, 300)
-
-print(a.get_customer("200005050505"))
-
-print(a.close_account("1988", 1001))
-
-#print(a.remove_customer("200005050505"))
-#a.get_account("200005050505", 1001)

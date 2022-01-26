@@ -53,7 +53,7 @@ class Customer:
     def add_account(self):
         acc = account.Account()
         self.accounts.append(acc)
-        print("Account is created")
+        print("Account has been created")
         return f"Account number: {acc.account_number},\nAccount type: {acc.account_type},\n Account balance: {acc.balance}"
 
     def close_account(self, account_number):
