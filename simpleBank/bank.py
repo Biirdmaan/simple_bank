@@ -1,5 +1,4 @@
 import customer
-import account
 
 class Bank:
 
@@ -38,7 +37,7 @@ class Bank:
         """
         all_customers = []
         for customer in self.customers:
-            details = customer.ssn, customer.last_name, customer.last_name
+            details = customer.ssn, customer.first_name, customer.last_name
             all_customers.append(details)
         return all_customers
         # returner bankens alla kunder (personnummer & namn)
@@ -152,7 +151,6 @@ class Bank:
                     print(x.add_account())
                     break
         # Skapa ett konto, returnerar: kontonummer eller -1 om personnumret inte hittades
-
 
     def get_account(self, ssn, account_id):
         for customer in self.customers:
