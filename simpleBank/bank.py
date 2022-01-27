@@ -1,5 +1,6 @@
 import customer
 
+
 class Bank:
 
     def __init__(self):
@@ -16,8 +17,11 @@ class Bank:
         """
         for line in open("Customer_bank.txt").readlines():
             cust = line.strip().split(':')
+
             for x in self.customers:
+
                 if cust[3] != x.ssn:
+
                     if int(cust[0]) != int(x.customer_id):
                         client = customer.Customer(cust[1], cust[2], cust[3], cust[0])
                         self.customers.append(client)
@@ -28,6 +32,7 @@ class Bank:
                         break
                 else:
                     print("Customer already exist!")
+                    break
         return self.customers
 
     def get_all_customers(self):
@@ -37,7 +42,7 @@ class Bank:
         """
         all_customers = []
         for customer in self.customers:
-            details = customer.ssn, customer.first_name, customer.last_name
+            details = customer.customer_id, customer.ssn, customer.first_name, customer.last_name
             all_customers.append(details)
         return all_customers
         # returner bankens alla kunder (personnummer & namn)
@@ -108,12 +113,6 @@ class Bank:
                     print(f"Person with {ssn} is not a customer!")
                     return False
 
-
-        # while ssn in self.customers:
-
-        # Byter namn på kunden, returnerar True om namnet ändrats, False om kunde inte finns.
-        pass
-
     def remove_customer(self, ssn):
         """
         Ta bort kund --> Alla konton tas bort
@@ -165,16 +164,14 @@ class Bank:
         # Returnerar en string: kontonummer, saldo, kontotyp
 
     def deposit(self, ssn, account_number, amount):
-
         for x in self.customers:
             if x.ssn == ssn:
                 for y in x.accounts:
                     if y.account_number == account_number:
-                        y.deposit(amount)
+                        y.deposit(int(amount))
                         return True
-                    else:
-                        print(f"Account {account_number} not found")
-                        return False
+                print(f"Account {account_number} not found")
+                return False
 
         # Gör en insättning på kontot, returnerar: True om det gick igenom, False om ssn eller account_id inte hittades.
 
@@ -186,11 +183,10 @@ class Bank:
                     if account_number == y.account_number:
                         y.withdraw(amount)
                         return True
-                    else:
-                        print(f"Account {account_number} not found!")
-                        return False
-        # Gör ett uttag från kontot, returnerar True --> ok, False --> gick åt helvete
-        pass
+
+                print(f"Account {account_number} not found!")
+                return False
+
 
     def close_account(self, ssn, account_number):
         for x in self.customers:
@@ -206,3 +202,11 @@ class Bank:
 
         # Avslutar ett konto
         # Returnerar en string: presentation av saldo som kunden ska ha.
+
+
+a = Bank()
+a.add_customer("Dejan", "Spasovic", "1234567890")
+a._load()
+a._load()
+print(a.get_all_customers())
+

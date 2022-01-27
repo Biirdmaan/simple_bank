@@ -1,8 +1,9 @@
 from bank import Bank
+import bank
 
 b = Bank()
+bank.Bank()
 
-# The menu selection
 def menu():
     print("""\nChoose your option:
     1. Add customer
@@ -140,104 +141,40 @@ def menu():
             b.get_account(ssn, account_number)
             menu()
 
-    elif answer == 9:
-        print("What would you like to do:\n1. Deposit\n2. Withdraw\n3. Back to main menu")
-        option = int(input("Enter your option: "))
+    # elif answer == 9:
+    #     print("What would you like to do:\n1. Deposit\n2. Withdraw\n3. Back to main menu")
+    #     option = int(input("Enter your option: "))
+    #
+    #     while option != 1 or 2 or 3:
+    #         if option == 1:
+    #             ssn = input("Enter customer ssn - 10 digits: ")
+    #             if len(ssn) != 10:
+    #                 print("Wrong input!\nLast try, pls enter ssn with 10 digits")
+    #                 ssn = input("Input ssn 10 digits: ")
+    #                 if len(ssn) != 10:
+    #                     menu()
+    #                 else:
+    #                     account_number = input("Which account number (4 digits) do you want deposit: ")
+    #                     while len(account_number) != 4 or not account_number.isnumeric():
+    #                         account_number = input("Which account number (4 digits) do you want deposit: ")
+    #
+    #                     amount = input("Whats the amount you want to deposit: ")
+    #                     b.deposit(ssn, account_number, amount)
+    #             else:
+    #                 account_number = input("Which account number (4 digits) do you want deposit: ")
+    #                 while len(account_number) != 4 or not account_number.isnumeric():
+    #                     account_number = input("Which account number (4 digits) do you want deposit: ")
+    #
+    #                 amount = input("Whats the amount you want to deposit: ")
+    #                 b.deposit(ssn, account_number, amount)
+    #
+    #         elif option == 2:
+    #             ssn = input("Enter customer ssn - 10 digits: ")
+    #
+    #
+    #         elif option == 3:
+    #             menu()
 
-        if option == 1:
-            ssn = input("Pls enter ssn 10 digits: ")
-
-            if len(ssn) != 10:
-                print("Wrong input!\nLast try, pls enter ssn with 10 digits")
-                ssn = input("Input ssn 10 digits: ")
-
-                if len(ssn) != 10:
-                    menu()
-
-                else:
-                    account_number = input("Pls enter your account number: ")
-                    amount = int(input("Pls enter amount you want to deposit: "))
-
-                    if amount is not int:
-                        print("Wrong input, pls enter amount (integers)")
-                        amount = int(input("Amount: "))
-                        if amount is not int:
-                            menu()
-                        else:
-                            deposit = b.deposit(ssn, account_number, amount)
-                            print(deposit)
-                            menu()
-                    else:
-                        deposit = b.deposit(ssn, account_number, amount)
-                        print(deposit)
-                        menu()
-            else:
-                account_number = input("Pls enter your account number: ")
-                amount = int(input("Pls enter amount you want to deposit: "))
-
-                if amount is not int:
-                    print("Wrong input, pls enter amount (integers)")
-                    amount = input("Amount: ")
-                    if amount is not int:
-                        menu()
-                    else:
-                        deposit = b.deposit(ssn, account_number, amount)
-                        print(deposit)
-                        menu()
-                else:
-                    deposit = b.deposit(ssn, account_number, amount)
-                    print(deposit)
-                    menu()
-
-        elif option == 2:
-            ssn = input("Pls enter ssn 10 digits: ")
-
-            if len(ssn) != 10:
-                print("Wrong input!\nLast try, pls enter ssn with 10 digits")
-                ssn = input("Input ssn 10 digits: ")
-
-                if len(ssn) != 10:
-                    menu()
-
-                else:
-                    account_number = input("Pls enter your account number: ")
-                    amount = int(input("Pls enter amount you want to withdraw: "))
-
-                    if amount is not int:
-                        print("Wrong input, pls enter amount (integers)")
-                        amount = input("Amount: ")
-                        amount = int(amount)
-                        if amount is not int:
-                            menu()
-                        else:
-                            withdraw = b.withdraw(ssn, account_number, amount)
-                            print(withdraw)
-                            menu()
-                    else:
-                        withdraw = b.withdraw(ssn, account_number, amount)
-                        print(withdraw)
-                        menu()
-            else:
-                account_number = input("Pls enter your account number: ")
-                amount = int(input("Pls enter amount you want to withdraw: "))
-
-                if amount is not int:
-                    print("Wrong input, pls enter amount (integers)")
-                    amount = input("Amount: ")
-                    amount = int(amount)
-                    if amount is not int:
-                        menu()
-                    else:
-                        withdraw = b.withdraw(ssn, account_number, amount)
-                        print(withdraw)
-                        menu()
-                else:
-                    withdraw = b.withdraw(ssn, account_number, amount)
-                    print(withdraw)
-                    menu()
-
-        elif option == 3:
-            menu()
     elif answer == 0:
         print("You have now left the building!")
     else:
