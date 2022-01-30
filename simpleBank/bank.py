@@ -168,7 +168,7 @@ class Bank:
             if x.ssn == ssn:
                 for y in x.accounts:
                     if y.account_number == account_number:
-                        y.deposit(int(amount))
+                        y.deposit(amount)
                         return True
                 print(f"Account {account_number} not found")
                 return False
