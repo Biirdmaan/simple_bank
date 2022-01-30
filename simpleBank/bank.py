@@ -1,4 +1,7 @@
 import customer
+import re
+import account
+
 
 
 class Bank:
@@ -6,6 +9,7 @@ class Bank:
     def __init__(self):
         self.customers = []
         self.name = "SEB"
+        self._load()
 
     # needs update, does not work with ssn yet!
     def _load(self):
@@ -16,23 +20,25 @@ class Bank:
         :return:
         """
         for line in open("Customer_bank.txt").readlines():
-            cust = line.strip().split(':')
+            cust = line.strip()
+            cust = re.split(pattern=r"[:# ]", string=cust)
+            if self.customers == []:
+                client = customer.Customer(cust[1], cust[2], cust[3], cust[0])
+                self.customers.append(client)
 
-            for x in self.customers:
-
-                if cust[3] != x.ssn:
-
-                    if int(cust[0]) != int(x.customer_id):
+            else:
+                for x in self.customers:
+                    if int(cust[0]) != int(x.customer_id) and str(cust[3] != str(x.ssn)):
                         client = customer.Customer(cust[1], cust[2], cust[3], cust[0])
                         self.customers.append(client)
                         break
-                    else:
+                    elif str(cust[3] != str(x.ssn)):
                         client = customer.Customer(cust[1], cust[2], cust[3])
                         self.customers.append(client)
                         break
-                else:
-                    print("Customer already exist!")
-                    break
+                    else:
+                        print("Customer already exist!")
+
         return self.customers
 
     def get_all_customers(self):
@@ -187,7 +193,6 @@ class Bank:
                 print(f"Account {account_number} not found!")
                 return False
 
-
     def close_account(self, ssn, account_number):
         for x in self.customers:
             if x.ssn == ssn:
@@ -202,11 +207,9 @@ class Bank:
 
         # Avslutar ett konto
         # Returnerar en string: presentation av saldo som kunden ska ha.
-
-
-a = Bank()
-a.add_customer("Dejan", "Spasovic", "1234567890")
-a._load()
-a._load()
-print(a.get_all_customers())
-
+# b = Bank()
+# b.add_customer("Dejan", "Spasovic", "1234567890")
+# b._load()
+# print(b.get_all_customers())
+# b._load()
+# print(b.get_all_customers())

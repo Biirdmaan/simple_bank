@@ -1,8 +1,7 @@
 from bank import Bank
-import bank
 
 b = Bank()
-bank.Bank()
+b._load()
 
 def menu():
     print("""\nChoose your option:
@@ -19,6 +18,7 @@ def menu():
     """)
     answer = int(input("Enter your selection:\n"))
 
+    # Add customer
     if answer == 1:
         ssn = input("Input your personal number 10 digits: ")
         if len(ssn) != 10:
@@ -38,6 +38,7 @@ def menu():
             b.add_customer(first_name, last_name, ssn)
             menu()
 
+    # Get customer by ssn
     elif answer == 2:
         ssn = input("Find customer by social security number (10 digits): ")
         if len(ssn) != 10:
@@ -55,11 +56,13 @@ def menu():
             print(customer)
             menu()
 
+    # Get all customers
     elif answer == 3:
         print("Customer list: ")
         print(b.get_all_customers())
         menu()
 
+    # Change customer name
     elif answer == 4:
         ssn = input("Input customer ssn 10 digits: ")
         if len(ssn) != 10:
@@ -78,6 +81,7 @@ def menu():
             b.change_customer_name(ssn, first_name, last_name)
             menu()
 
+    # Remove customer
     elif answer == 5:
         ssn = input("Input customer ssn (10 digits) you want to remove: ")
         if len(ssn) != 10:
@@ -94,6 +98,7 @@ def menu():
             print(remove)
             menu()
 
+    # Add account
     elif answer == 6:
         ssn = input("Enter customer ssn 10 digits: ")
         if len(ssn) != 10:
@@ -109,6 +114,7 @@ def menu():
             b.add_account(ssn)
             menu()
 
+    # Close account
     elif answer == 7:
         ssn = input("Enter customer ssn - 10 digits: ")
         if len(ssn) != 10:
@@ -125,6 +131,7 @@ def menu():
             b.close_account(ssn, account_number)
             menu()
 
+    # Get account by ssn and account number
     elif answer == 8:
         ssn = input("Enter customer ssn - 10 digits: ")
         if len(ssn) != 10:
@@ -141,6 +148,7 @@ def menu():
             b.get_account(ssn, account_number)
             menu()
 
+    # Deposit, Withdraw or go back to main menu
     elif answer == 9:
         print("What would you like to do:\n1. Deposit\n2. Withdraw\n3. Back to main menu")
         try:
@@ -188,12 +196,14 @@ def menu():
                 menu()
         menu()
 
+    # leave program
     elif answer == 0:
         print("You have now left the building!")
+
+    # If answer is not 0-9, main menu will be displayed
     else:
         menu()
 
 
-b.add_customer("Dejan", "Spasovic", "1234567890")
-b.add_account("1234567890")
-menu()
+if __name__ == "__main__":
+    menu()
