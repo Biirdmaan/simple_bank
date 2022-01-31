@@ -1,7 +1,8 @@
 from bank import Bank
 
+
 b = Bank()
-b._load()
+
 
 def menu():
     print("""\nChoose your option:
@@ -21,10 +22,10 @@ def menu():
     # Add customer
     if answer == 1:
         ssn = input("Input your personal number 10 digits: ")
-        if len(ssn) != 10:
+        if len(ssn) != 10 or ssn.isalpha():
             print("I told you 10 digits!\n")
             ssn = input("Enter your social security number with 10 digits:\n")
-            if len(ssn) != 10:
+            if len(ssn) != 10 or ssn.isalpha():
                 print("Personal number invalid!")
                 menu()
             else:
@@ -41,10 +42,10 @@ def menu():
     # Get customer by ssn
     elif answer == 2:
         ssn = input("Find customer by social security number (10 digits): ")
-        if len(ssn) != 10:
+        if len(ssn) != 10 or ssn.isalpha():
             print("Wrong!\nI told you 10 digits..")
             ssn = input("Enter social security number with 10 digits:\n")
-            if len(ssn) != 10:
+            if len(ssn) != 10 or ssn.isalpha():
                 print("Social security number invalid!\n")
                 menu()
             else:
@@ -65,10 +66,10 @@ def menu():
     # Change customer name
     elif answer == 4:
         ssn = input("Input customer ssn 10 digits: ")
-        if len(ssn) != 10:
+        if len(ssn) != 10 or ssn.isalpha():
             print("Wrong input, pls enter ssn 10 digits")
             ssn = input("Last try, input customer ssn 10 digits: ")
-            if len(ssn) != 10:
+            if len(ssn) != 10 or ssn.isalpha():
                 menu()
             else:
                 first_name = input("Enter customer first name: ").capitalize()
@@ -84,10 +85,10 @@ def menu():
     # Remove customer
     elif answer == 5:
         ssn = input("Input customer ssn (10 digits) you want to remove: ")
-        if len(ssn) != 10:
+        if len(ssn) != 10 or ssn.isalpha():
             print("Wrong input, pls enter ssn 10 digits")
             ssn = input("Last try to remove customer, input ssn 10 digits: ")
-            if len(ssn) != 10:
+            if len(ssn) != 10 or ssn.isalpha():
                 menu()
             else:
                 remove = b.remove_customer(ssn)
@@ -101,10 +102,10 @@ def menu():
     # Add account
     elif answer == 6:
         ssn = input("Enter customer ssn 10 digits: ")
-        if len(ssn) != 10:
+        if len(ssn) != 10 or ssn.isalpha():
             print("Wrong input!\nLast try, pls enter ssn with 10 digits")
             ssn = input("Input ssn 10 digits: ")
-            if len(ssn) != 10:
+            if len(ssn) != 10 or ssn.isalpha():
                 menu()
             else:
                 b.add_account(ssn)
@@ -117,35 +118,37 @@ def menu():
     # Close account
     elif answer == 7:
         ssn = input("Enter customer ssn - 10 digits: ")
-        if len(ssn) != 10:
+
+        if len(ssn) != 10 or ssn.isalpha():
             print("Wrong input!\nLast try, pls enter ssn with 10 digits")
             ssn = input("Input ssn 10 digits: ")
-            if len(ssn) != 10:
+            if len(ssn) != 10 or ssn.isalpha():
                 menu()
             else:
-                account_number = input("Which account do you want to close: ")
-                b.close_account(ssn, account_number)
+                account_number = int(input("Which account do you want to close: "))
+                print(b.close_account(ssn, account_number))
                 menu()
         else:
-            account_number = input("Which account do you want to close: ")
-            b.close_account(ssn, account_number)
+            account_number = int(input("Which account do you want to close: "))
+            print(b.close_account(ssn, account_number))
             menu()
 
     # Get account by ssn and account number
     elif answer == 8:
         ssn = input("Enter customer ssn - 10 digits: ")
-        if len(ssn) != 10:
+
+        if len(ssn) != 10 or ssn.isalpha():
             print("Wrong input!\nLast try, pls enter ssn with 10 digits")
             ssn = input("Input ssn 10 digits: ")
-            if len(ssn) != 10:
+            if len(ssn) != 10 or ssn.isalpha():
                 menu()
             else:
-                account_number = input("Which account do you want to find: ")
-                b.get_account(ssn, account_number)
+                account_number = int(input("Which account do you want to check (4 digits): "))
+                print(print(b.get_account(ssn, account_number)))
                 menu()
         else:
-            account_number = input("Which account do you want to find: ")
-            b.get_account(ssn, account_number)
+            account_number = int(input("Which account do you want to check (4 digits): "))
+            print(b.get_account(ssn, account_number))
             menu()
 
     # Deposit, Withdraw or go back to main menu
@@ -160,10 +163,10 @@ def menu():
         while option == 1 or 2 or 3:
             if option == 1:
                 ssn = input("Enter customer ssn - 10 digits: ")
-                if len(ssn) != 10:
+                if len(ssn) != 10 or ssn.isalpha():
                     print("Wrong input!\nLast try, pls enter ssn with 10 digits")
                     ssn = input("Input ssn 10 digits: ")
-                    if len(ssn) != 10:
+                    if len(ssn) != 10 or ssn.isalpha():
                         menu()
                 else:
                     try:
@@ -177,10 +180,10 @@ def menu():
 
             elif option == 2:
                 ssn = input("Enter customer ssn - 10 digits: ")
-                if len(ssn) != 10:
+                if len(ssn) != 10 or ssn.isalpha():
                     print("Wrong input!\nLast try, pls enter ssn with 10 digits")
                     ssn = input("Input ssn 10 digits: ")
-                    if len(ssn) != 10:
+                    if len(ssn) != 10 or ssn.isalpha():
                         menu()
                 else:
                     try:

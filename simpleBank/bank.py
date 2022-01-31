@@ -1,44 +1,60 @@
 import customer
 import re
-import account
-
+from account import Account
 
 
 class Bank:
 
     def __init__(self):
         self.customers = []
-        self.name = "SEB"
+        self.name = "NBI"
         self._load()
 
-    # needs update, does not work with ssn yet!
     def _load(self):
         """
         Load and strip customer information from a textfile.
         Customer information initialize to a customer object and append to customers[], if ssn does not exist.
         if customer_id already exist, customer gets a new customer_id
-        :return:
+        :return: self.customers
         """
-        for line in open("Customer_bank.txt").readlines():
+
+        for line in open("Customer_bank.txt", "rt").readlines():
             cust = line.strip()
-            cust = re.split(pattern=r"[:# ]", string=cust)
+            cust = re.split(pattern=r"[:#]", string=cust)
+
+
             if self.customers == []:
                 client = customer.Customer(cust[1], cust[2], cust[3], cust[0])
                 self.customers.append(client)
 
+                # Adding accounts and append to list
+                acc1 = Account(cust[4], cust[6], cust[5])
+                acc2 = Account(cust[7], cust[9], cust[8])
+                client.accounts.append(acc1)
+                client.accounts.append(acc2)
+
             else:
                 for x in self.customers:
-                    if int(cust[0]) != int(x.customer_id) and str(cust[3] != str(x.ssn)):
+                    if int(cust[0]) != int(x.customer_id):
                         client = customer.Customer(cust[1], cust[2], cust[3], cust[0])
                         self.customers.append(client)
-                        break
-                    elif str(cust[3] != str(x.ssn)):
-                        client = customer.Customer(cust[1], cust[2], cust[3])
-                        self.customers.append(client)
+
+                        # Adding accounts and append to list
+                        acc1 = Account(cust[4], cust[6], cust[5])
+                        acc2 = Account(cust[7], cust[9], cust[8])
+                        client.accounts.append(acc1)
+                        client.accounts.append(acc2)
                         break
                     else:
-                        print("Customer already exist!")
+                        client = customer.Customer(cust[1], cust[2], cust[3])
+                        self.customers.append(client)
 
+                        # Adding accounts and append to list
+                        acc1 = Account(cust[4], cust[6], cust[5])
+                        acc2 = Account(cust[7], cust[9], cust[8])
+                        client.accounts.append(acc1)
+                        client.accounts.append(acc2)
+                        break
         return self.customers
 
     def get_all_customers(self):
@@ -47,39 +63,38 @@ class Bank:
         :return: list of all customers, showing customer information: ssn, first_name and last_name
         """
         all_customers = []
+
         for customer in self.customers:
             details = customer.customer_id, customer.ssn, customer.first_name, customer.last_name
             all_customers.append(details)
         return all_customers
-        # returner bankens alla kunder (personnummer & namn)
 
     def add_customer(self, first_name, last_name, ssn):
         """
-        Create customer if ssn not used.
+        Add new customer to customers [list] if ssn not used.
         :param first_name:
         :param last_name:
         :param ssn:
-        :return:
+        :return: True if customer created, False if not
         """
-        client = customer.Customer(first_name, last_name, ssn)
+
         check = True
+
         if self.customers == []:
-            self.customers.append(client)
-            print(f"Customer {client.customer_id}: {client.first_name} {client.last_name} has been added!")
+            check
         else:
             for x in self.customers:
-                if x.ssn != client.ssn:
-                    self.customers.append(client)
-                    print(f"Customer {client.customer_id}: {client.first_name} {client.last_name} has been added!")
-                    break
-                else:
-                    check = False
+                if int(ssn) == int(x.ssn):
                     print("SSN already exist!")
+                    check = False
                     break
-        return check
 
-        # Skapar en ny kund om inte personnumret redan angetts.
-        # Returner True om kunden har skapat & False om personnumret redan är upptaget.
+        if check == True:
+            client = customer.Customer(first_name, last_name, ssn)
+            self.customers.append(client)
+            print(f"Customer {client.customer_id}: {client.first_name} {client.last_name} has been added!")
+
+        return check
 
     def get_customer_by_ssn(self, pnr):
         """
@@ -93,9 +108,8 @@ class Bank:
             for x in self.customers:
                 if pnr == x.ssn:
                     return x.show_customer()
-                else:
-                    print("Customer not found!")
-                    break
+                #else:
+            print("Customer not found!")
 
     def change_customer_name(self, ssn, first_name, last_name):
         """
@@ -115,28 +129,25 @@ class Bank:
                     x.last_name = last_name
                     print(f"Customer {x.first_name} {x.last_name} has been updated!")
                     return True
-                else:
-                    print(f"Person with {ssn} is not a customer!")
-                    return False
+
+            print(f"Person with pnr: {ssn} is not a customer!")
+            return False
 
     def remove_customer(self, ssn):
         """
-        Ta bort kund --> Alla konton tas bort
-        Returneras: resultatet, en lista med alla information om alla konton som tagits bort & saldo som kunden ska
-        få tillbaka
+        Remove customer, accounts closes and customer will receive total amount from accounts
         :param ssn:
-        :return:
+        :return:Customer details + received balance or ssn not found
         """
         return_balance = 0
-        customer = []
-        account_list = []
+
         for x in self.customers:
             if x.ssn == ssn:
                 customer = self.customers.index(x)
                 self.customers.pop(customer)
 
                 for y in x.accounts:
-                    return_balance = y.balance
+                    return_balance += y.balance
                 return f"Customer {x.first_name} {x.last_name} is deleted\n" \
                        f"Return balance: {return_balance}"
             else:
@@ -155,21 +166,32 @@ class Bank:
                 if ssn == x.ssn:
                     print(x.add_account())
                     break
-        # Skapa ett konto, returnerar: kontonummer eller -1 om personnumret inte hittades
 
     def get_account(self, ssn, account_id):
-        for customer in self.customers:
-            if customer.ssn == ssn:
-                print(customer.accounts[0])
-                for x in customer.accounts[0]:
-                    if x.account_id == account_id:
-                        return x.show_account()
-                    break
-            else:
-                return "Error, something went wrong"
+        """
+        Get account by ssn & account_number
+        :param ssn:
+        :param account_id:
+        :return: Account details or Error if ssn/account_number is not correct
+        """
+
+        for x in self.customers:
+            if x.ssn == ssn:
+                for y in x.accounts:
+                    if y.account_number == account_id:
+                        return f"Account number: {y.account_number}\nBalance: {y.balance}\nAccount type: {y.account_type}"
+
+        return "Error, something went wrong"
         # Returnerar en string: kontonummer, saldo, kontotyp
 
     def deposit(self, ssn, account_number, amount):
+        """
+        Account deposit
+        :param ssn:
+        :param account_number:
+        :param amount:
+        :return: True if deposit, False if not
+        """
         for x in self.customers:
             if x.ssn == ssn:
                 for y in x.accounts:
@@ -179,9 +201,14 @@ class Bank:
                 print(f"Account {account_number} not found")
                 return False
 
-        # Gör en insättning på kontot, returnerar: True om det gick igenom, False om ssn eller account_id inte hittades.
-
     def withdraw(self, ssn, account_number, amount):
+        """
+        withdraw amount from account
+        :param ssn:
+        :param account_number:
+        :param amount:
+        :return: True if withdrawn, False if not.
+        """
 
         for x in self.customers:
             if x.ssn == ssn:
@@ -194,22 +221,19 @@ class Bank:
                 return False
 
     def close_account(self, ssn, account_number):
+        """
+        Close account by ssn & account_number
+        :param ssn:
+        :param account_number:
+        :return: account_number & which amount customer will receive
+        """
         for x in self.customers:
             if x.ssn == ssn:
                 for y in x.accounts:
                     if y.account_number == account_number:
                         x.close_account(account_number)
                         return f"Account {account_number} closed, you will receive {y.balance}"
-                    else:
-                        return f"Account: {account_number} not found!"
-            else:
-                return f"Customer with ssn {ssn} not found!"
 
-        # Avslutar ett konto
-        # Returnerar en string: presentation av saldo som kunden ska ha.
-# b = Bank()
-# b.add_customer("Dejan", "Spasovic", "1234567890")
-# b._load()
-# print(b.get_all_customers())
-# b._load()
-# print(b.get_all_customers())
+                return f"Account: {account_number} not found!"
+
+        return f"Customer with ssn {ssn} not found!"

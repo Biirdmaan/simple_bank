@@ -4,11 +4,17 @@ import itertools
 class Account:
     account_number = itertools.count()
 
-    def __init__(self):
-        self.account_type = "Debit account"
-        self.balance = 0
-        self.account_number = next(self.account_number)  #
-        self.account_number = 1001 + self.account_number
+    def __init__(self, account_number=None, balance=None, account_type=None):
+
+        if account_number and balance and account_type:
+            self.account_number = int(account_number)
+            self.balance = float(balance)
+            self.account_type = str(account_type)
+        else:
+            self.account_type = "Debit account"
+            self.balance = 0
+            self.account_number = next(self.account_number)  #
+            self.account_number = int(1001 + self.account_number)
 
     def __str__(self):
         return f":{self.account_number}:{self.account_type}:{self.balance}"

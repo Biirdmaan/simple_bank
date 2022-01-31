@@ -5,13 +5,15 @@ import account
 class Customer:
     customer_id = itertools.count()
 
-    def __init__(self, first_name, last_name, ssn, customer_id=None):
+    def __init__(self, first_name=None, last_name=None, ssn=None, customer_id=None):
         self.first_name = first_name
         self.last_name = last_name
         self.ssn = str(ssn)
         self.accounts = []
+
         if customer_id:
-            self.customer_id = customer_id
+            self.customer_id = next(self.customer_id)
+            self.customer_id = int(customer_id) + self.customer_id
         else:
             self.customer_id = next(self.customer_id)
             self.customer_id = 11110 + self.customer_id
@@ -60,5 +62,4 @@ class Customer:
             if account_number == x.account_number:
                 account = self.accounts.index(x)
                 self.accounts.pop(account)
-                break
 
